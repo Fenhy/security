@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>noryar-证书生成系统</title>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/index.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/license.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/login.css">
+</head>
+<body>
+    <!-- header -->
+	<#include "common/header.html" >
+    <!-- context -->
+    <div class="container context">
+        <div class="row">
+            <div class="col-xs-6">
+                <h1>生成证书</h1>
+                <hr/>
+                <form class="form-inline msgfileForm" action="${request.contextPath}/license/createLicFile.do" method="post" enctype="multipart/form-data" >
+                    <div class="form-group">
+                        <label for="fileName">File</label>
+                        <input type="text" class="form-control" id="uploadFileName" readonly="readonly">
+                    </div>
+                    <button type="button" class="btn btn-default uploadBtn">上传资料</button>
+                    <button type="button" class="btn btn-default createLicenseBtn">生成证书</button>
+                    <a class="btn btn-default" href="${request.contextPath}/license/getTempFile.do">下载模板</a>
+                    <input type="file" name="msgfile" id="uploadInput" onchange="uploadInputChange(this, 'uploadFileName')"/>
+                    <div id="uploadCnt"></div>
+                </form>
+            </div>
+            <div class="col-xs-6">
+                <h1>验证证书</h1>
+                <hr/>
+                <form class="form-inline verificationForm" action="${request.contextPath}/license/checkLicFile.do" method="post">
+                    <div class="form-group">
+                        <label for="licenseName">File</label>
+                        <input type="text" class="form-control" id="licenseName" readonly="readonly">
+                    </div>
+                    <button type="button" class="btn btn-default uploadLicenseBtn">上传证书</button>
+                    <button type="button" class="btn btn-default verificationBtn">验证证书</button>
+                    <input type="file" name="msgfile" id="licenseInput" onchange="uploadInputChange(this, 'licenseName')" />
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <hr/>
+        <h1>注册信息</h1>
+        <div id="vueApp" class="table-responsive">
+        	<div class="licSearchForm">
+        	    <form class="form-inline" action="">
+        	    	<div class="form-group">
+        	    	    <label for="keywords">关键字：</label>
+        	    	    <input type="text" class="form-control" v-model="keyWords" palceHolder="请输入关键字" />
+        	    	</div>
+	        	    <button type="button" class="btn btn-default" @click="getLicList()">查询</button>
+        	    </form>
+        	</div>
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th v-for="v,k in cols">
+                        {{v}}
+                    </th>
+                </tr>
+                <tr v-if="dataList == null || dataList.length == 0">
+                	<td colspan="5">暂无数据</td>
+                </tr>
+                <tr v-else v-for="data,i in dataList">
+                	<td style="display: none">{{data['licid']}}</td>
+                	<td v-for="v,k in cols" v-if="k == 'id'">{{i + 1}}</td>
+                	<td v-else-if="k == 'start' || k == 'end'">{{new Date(data[k]).Format('yyyy-MM-dd')}}</td>
+                	<td v-else-if="k != 'url'">{{data[k]}}</td>
+                	<td v-else><a v-bind:href="'${request.contextPath}/license/getLicFile.do?path=' + data[k]">下载</td>
+                </tr>
+            </table>
+            <nav v-if="pageInfo['totalCnt'] >= 1" aria-label="Page navigation">
+                <ul class="pagination">
+                    <li :class="pageInfo['currentPage']==1?'disabled':''" @click="pageInfo['currentPage'] -= 1; getLicList()">
+                        <a href="javascript:;" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li v-for="page in pageInfo.totalPage" :class="page==pageInfo['currentPage']?'active':''" @click="pageInfo['currentPage'] = page; getLicList()"><a href="#">{{page}}</a></li>
+                    <li :class="pageInfo['currentPage']==pageInfo['totalPage']?'disabled':''" @click="pageInfo['currentPage'] += 1; getLicList()">
+                        <a href="javascript:;" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- footer -->
+    <#include "common/copyRight.html" >
+</body>
+<script src="${request.contextPath}/view/framework/jquery3.1.1/js/jquery-3.1.1.min.js"></script>
+<script src="${request.contextPath}/view/framework/bootstrap3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/view/framework/vue/js/vue.js"></script>
+<script type="text/javascript" src="${request.contextPath}/view/js/util.js"></script>
+<script src="${request.contextPath}/view/js/license.js"></script>
+<script type="text/javascript">
+	var ajaxHelper = new AjaxHelper();
+	var vueApp = new Vue({
+		el		:		"#vueApp",
+		data	:		{
+			apiUrl	:	"${request.contextPath}/license/getLicMakeInfo.do",
+			cols	:		{
+				id			:	"序号",
+				username	:	"用户名",
+				start		:	"开始时间",
+				end			:	"结束时间",
+				url			:	"操作"
+			},
+			dataList	:		[],
+			pageInfo	:		{currentPage : 1, pageSize : 10, totalPage : 1},
+			keyWords	:		""
+		},
+		created: function() {
+	        this.getLicList();
+	    },
+	    methods: {
+	    	getLicList: function() {
+	            // 定义vm变量，让它指向this,this是当前的Vue实例
+	            var vm = this,
+	                callback = function(data) {
+	                    // 由于函数的作用域，这里不能用this
+	                    var pageInfo = data['pageInfo'];
+	                    vm.dataList = pageInfo['dataList'];
+	                    vm.pageInfo = pageInfo;
+	                }
+	            var pageInfo = vm.pageInfo;
+	            // 过滤分页
+	            if (pageInfo.currentPage <= 0) {
+	            	pageInfo.currentPage = 1;
+	            	return;
+	            } else if (pageInfo.currentPage > pageInfo.totalPage){
+	            	pageInfo.currentPage = pageInfo.totalPage;
+	            	return;
+	            }
+	            // ajax执行
+	            var ajaxData = {currentPage	: pageInfo.currentPage, 
+	            				pageSize : pageInfo.pageSize,
+	            				keyWords : vm.keyWords.trim()
+	            			   }
+	            ajaxHelper.get(vm.apiUrl, ajaxData, callback);
+	        }
+	        
+	    }
+	});
+</script>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-8 17:55:05 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.noryar.security.framework.db.hbm.UserDTO" table="USER">
+    	<id name="userid">
+    		<column name="USERID"></column>
+    		<generator class="uuid"></generator>
+    	</id>
+        <property name="username" type="java.lang.String">
+            <column name="USERNAME" />
+        </property>
+        <property name="nickname" type="java.lang.String">
+            <column name="NICKNAME" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="PASSWORD" />
+        </property>
+        <property name="createUser" type="java.lang.String">
+            <column name="CREATE_USER" />
+        </property>
+        <property name="createDate" type="java.util.Date">
+            <column name="CREATE_DATE" />
+        </property>
+        <property name="updateUser" type="java.lang.String">
+            <column name="UPDATE_USER" />
+        </property>
+        <property name="updateDate" type="java.util.Date">
+            <column name="UPDATE_DATE" />
+        </property>
+    </class>
+</hibernate-mapping>

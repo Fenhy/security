@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop" 
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+  <!-- DAO层扫描 -->
+  <context:component-scan base-package="com.noryar.security.dao.**">
+    <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+  </context:component-scan>
+    
+  <!-- ***************************DAO start********************************* -->
+  <!-- mybatis文件配置，扫描所有mapper文件 -->
+<!--   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+  	p:dataSource-ref="dataSource" p:configLocation="/WEB-INF/spring/mybatis-config.xml"
+  	p:mapperLocations="classpath:mapper/**/*.xml" /> -->
+  <!-- configLocation为mybatis属性 mapperLocations为所有mapper -->
+  
+  <!-- spring与mybatis整合配置，扫描所有dao -->
+<!--   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+  	p:basePackage="com.iss.innovation.dao"
+  	p:sqlSessionFactoryBeanName="sqlSessionFactory" /> -->
+  
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+        <prop key="hibernate.hbm2dll.auto">update</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.format_sql">true</prop>
+      </props>
+    </property>
+    <property name="mappingDirectoryLocations">
+      <list>
+        <value>classpath:com/noryar/security/framework/db/hbm</value>
+        <value>classpath:com/noryar/security/framework/namedquery</value>
+      </list>
+    </property>
+  </bean>
+  	
+  <!-- ***************************DAO end********************************* -->
+  <!-- ***************************读写分离start******************************* -->
+  <!-- 数据源基础配置 -->
+  <bean id="parentDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+    <property name="filters" value="stat" />
+    <property name="maxActive" value="50" />
+    <property name="initialSize" value="10" />
+    <property name="maxWait" value="60000" />
+    <property name="minIdle" value="50" />
+    <property name="testWhileIdle" value="true" />
+    <property name="testOnBorrow" value="false" />
+    <property name="testOnReturn" value="false" />
+    <property name="validationQuery" value="SELECT 1" />
+    <property name="timeBetweenEvictionRunsMillis" value="60000" />
+    <property name="minEvictableIdleTimeMillis" value="300000" />
+    <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+  </bean>
+  <!-- 读数据源 -->
+  <bean id="write" parent="parentDataSource" />
+  <!-- 写数据源 -->
+  <bean id="read01" destroy-method="close" parent="parentDataSource">
+    <property name="url">
+      <value>${jdbc.read01.url}</value>
+    </property>
+    <property name="username">
+      <value>${jdbc.read01.username}</value>
+    </property>
+    <property name="password">
+      <value>${jdbc.read01.password}</value>
+    </property>
+  </bean>
+  <!-- 动态数据源 -->
+  <bean id="dataSource" class="com.noryar.security.framework.db.datasource.DataSourceRouter">
+    <property name="targetDataSources">
+      <map key-type="java.lang.String">
+        <entry key="write" value-ref="write" />
+        <entry key="read01" value-ref="read01" />
+      </map>
+    </property>
+    <property name="defaultTargetDataSource" ref="write"></property>
+  	<property name="dataSourceKey" ref="dataSourceKey"></property>
+  </bean>
+  <!-- 读写管理 -->
+  <bean id="dataSourceKey" class="com.noryar.security.framework.db.datasource.DataSourceKeyImpl">
+    <property name="readDateSourceMap">
+      <map key-type="java.lang.String">
+        <entry key="read01" value="read01" />
+      </map>
+    </property>
+    <property name="writeKey" value="write"></property>
+  </bean>
+   <!-- 动态数据源拦截器 -->
+  <bean id="dataSourceInterceptor" class="com.noryar.security.framework.db.datasource.DataSourceInterceptor">
+    <property name="attributes">
+      <props>
+        <prop key="query*">read</prop>
+        <prop key="find*">read</prop>
+        <prop key="get*">read</prop>
+        <prop key="load*">read</prop>
+        <prop key="count*">read</prop>
+        <prop key="list*">read</prop>
+        <prop key="save*">write</prop>
+        <prop key="upd*">write</prop>
+        <prop key="del*">write</prop>
+        <prop key="add*">write</prop>
+        <prop key="edit*">write</prop>
+        <prop key="destory*">write</prop>
+        <prop key="create*">write</prop>
+        <prop key="remove*">write</prop>
+        <prop key="cancel*">write</prop>
+        <prop key="insert*">write</prop>
+        <prop key="*">read</prop>
+      </props>
+    </property>
+    <property name="dataSourceKey">
+      <ref bean="dataSourceKey" />
+    </property>
+  </bean>
+  <!-- ***************************读写分离end******************************* -->
+  <!-- ***************************事务控制start***************************** -->
+  <!-- 事务配置 -->
+  <!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean> -->
+  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+  <!-- 事务管理拦截器 -->
+  <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager" ref="transactionManager" />
+    <property name="transactionAttributes">
+      <props>
+        <prop key="query*">PROPAGATION_SUPPORTS,-Exception</prop>
+        <prop key="find*">PROPAGATION_SUPPORTS,-Exception</prop>
+        <prop key="get*">PROPAGATION_SUPPORTS,-Exception</prop>
+        <prop key="load*">PROPAGATION_SUPPORTS,-Exception</prop>
+        <prop key="count*">PROPAGATION_SUPPORTS,-Exception</prop>
+        <prop key="list*">PROPAGATION_SUPPORTS,-Exception</prop>
+        <prop key="save*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="del*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="add*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="edit*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="upd*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="remove*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="create*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="cancel*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="insert*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="*">PROPAGATION_SUPPORTS,-Exception</prop>
+      </props>
+    </property>
+  </bean>
+  <!-- 根据Name匹配拦截器 -->
+  <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+    <property name="beanNames">
+      <list>
+        <value>*ServiceImpl</value>
+      </list>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>dataSourceInterceptor</value>
+        <value>transactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+  <!-- ***************************事务控制end***************************** -->
+	
+</beans>

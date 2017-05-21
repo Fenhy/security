@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder location="classpath:jdbc-mysql.properties" />
+	<import resource="app-db.xml" />
+	
+	<!-- service组件扫描 -->
+	<context:component-scan base-package="com.noryar.security.service.*.impl">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+
+	<aop:aspectj-autoproxy />
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<!-- xmemcached client -->
+	<!-- <bean name="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder"> 
+		XMemcachedClientBuilder have two arguments.First is server list,and second 
+		is weights array. <constructor-arg> <list> <bean class="java.net.InetSocketAddress"> 
+		<constructor-arg> <value>${memcached.url}</value> </constructor-arg> <constructor-arg> 
+		<value>${memcached.port}</value> </constructor-arg> </bean> </list> </constructor-arg> 
+		<constructor-arg> <list> <value>1</value> </list> </constructor-arg> <property 
+		name="connectionPoolSize" value="1" /> </bean> Use factory bean to build 
+		memcached client <bean id="memcachedClient" name="memcachedClient" factory-bean="memcachedClientBuilder" 
+		factory-method="build" destroy-method="shutdown" /> -->
+</beans>

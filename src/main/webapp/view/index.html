@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>欢迎使用noryar安全系统</title>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/index.css"/>
+</head>
+<body>
+    <!-- header -->
+	<#include "common/header.html" />
+    <!-- what's us -->
+    <div class="whatus">
+        <h1>Noryar致力于为开发者提供更快捷的开发方式</h1>
+        <p>我们将为您提供专业的技术文档</p>
+        <p>您也可以直接下载相关代码</p>
+    </div>
+    <!-- context -->
+    <div class="container context">
+        <div class="row hotdemo">
+        	<div class="col-xs-12"><h3 class="hotdemo-title">热门案例&nbsp;&nbsp;Hot demo</h3></div>
+            <div class="col-xs-6">
+            	<div class="demo-model">
+            		<a href="${request.contextPath}/viewc/license/index.do"><img alt="license认证" src="${request.contextPath}/view/demoImg/demo-license-1.jpg"></a>
+            	</div>
+            </div>
+            <div class="col-xs-6">
+            	<div class="demo-model">
+            		<a href="javascript:alert('建设中...')"><img alt="工程加密" src="${request.contextPath}/view/demoImg/demo-warEncrypt-1.jpg"></a>
+            	</div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <#include "common/copyRight.html" />
+</body>
+<script src="${request.contextPath}/view/framework/jquery3.1.1/js/jquery-3.1.1.min.js"></script>
+<script src="${request.contextPath}/view/framework/bootstrap3.3.7/js/bootstrap.min.js"></script>
+</html>

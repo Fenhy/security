@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>noryar-登入</title>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/index.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/login.css"/>
+</head>
+<body class="login">
+    <!-- header -->
+    <#include "common/header.html" />
+    <div class="loginDiv">
+        <div class="loginImg">
+            <img alt="" src="">
+        </div>
+        <h1>Sign in to Noryar</h1>
+        <div class="loginFormDiv">
+            <form class="loginForm" action="${request.contextPath}/login/login.do" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                <button type="button" class="btn btn-primary btn-block loginBtn">Sign in</button>
+                <a href="${request.contextPath}/viewc/login/register.do" class="btn btn-success btn-block">New to Noryar</a>
+            </form>
+        </div>
+    </div>
+    <!-- footer -->
+    <#include "common/copyRight.html" />
+</body>
+<script src="${request.contextPath}/view/framework/jquery3.1.1/js/jquery-3.1.1.min.js"></script>
+<script src="${request.contextPath}/view/framework/bootstrap3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/view/js/util.js"></script>
+<script src="${request.contextPath}/view/js/login.js"></script>
+</html>

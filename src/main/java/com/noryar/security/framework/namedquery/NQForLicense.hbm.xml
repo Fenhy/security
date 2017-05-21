@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-8 17:55:05 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+  <sql-query name="getLicMakeInfoCnt">
+    <![CDATA[
+      SELECT count(*)
+      FROM make_lic
+      #if($keyWords)
+      	WHERE username LIKE CONCAT('%',:keyWords,'%')
+      #end
+    ]]>
+  </sql-query>
+  <sql-query name="getLicMakeInfo">
+    <![CDATA[
+      SELECT username,
+      		 start,
+             end,
+             url,
+             licid
+      FROM make_lic
+      #if($keyWords)
+      	WHERE username LIKE CONCAT('%',:keyWords,'%')
+      #end
+    ]]>
+  </sql-query>
+</hibernate-mapping>

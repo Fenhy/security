@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>noryar-注册</title>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/framework/bootstrap3.3.7/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/index.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/view/css/register.css"/>
+</head>
+<body>
+    <!-- header -->
+    <#include "common/header.html" />
+    <div class="registerDiv">
+        <div class="registerImg">
+            <img alt="" src="">
+        </div>
+        <h1>Create your personal account</h1>
+        <div class="registerFormDiv">
+            <form class="registerForm" action="${request.contextPath}/login/register.do" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                 <div class="form-group">
+                    <label for="nickname">Nickname</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Nickname">
+                </div>
+                <button type="button" class="btn btn-primary btn-block registerBtn">Create an account</button>
+            </form>
+        </div>
+    </div>
+    <!-- footer -->
+    <#include "common/copyRight.html" />
+</body>
+<script src="${request.contextPath}/view/framework/jquery3.1.1/js/jquery-3.1.1.min.js"></script>
+<script src="${request.contextPath}/view/framework/bootstrap3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/view/js/util.js"></script>
+<script src="${request.contextPath}/view/js/register.js"></script>
+</html>
