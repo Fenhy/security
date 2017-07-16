@@ -18,7 +18,7 @@
         </div>
         <h1>Sign in to Noryar</h1>
         <div class="loginFormDiv">
-            <form class="loginForm" action="${request.contextPath}/login/login.do" method="post">
+            <form class="loginForm" action="/login/login.do" method="post">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username">
@@ -27,6 +27,7 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                 </div>
+                <input type="checkbox" id="jizhumima" name="jizhumima" value="1" />记住密码
                 <button type="button" class="btn btn-primary btn-block loginBtn">Sign in</button>
                 <a href="${request.contextPath}/viewc/login/register.do" class="btn btn-success btn-block">New to Noryar</a>
             </form>

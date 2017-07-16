@@ -16,20 +16,20 @@
     <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
   </context:component-scan>
 	
-  <mvc:interceptors>
-    <mvc:interceptor>
-      <mvc:mapping path="/**/viewc/index.do"/>
-      <bean class="com.noryar.security.framework.interceptor.CommonInterceptor"></bean>
-    </mvc:interceptor>
-    <mvc:interceptor>
-      <mvc:mapping path="/**/license/**"/>
-      <bean class="com.noryar.security.framework.interceptor.UserAuthInterceptor"></bean>
-    </mvc:interceptor>
-  </mvc:interceptors>
+  <!--<mvc:interceptors>-->
+    <!--<mvc:interceptor>-->
+      <!--<mvc:mapping path="/**/viewc/index.do"/>-->
+      <!--<bean class="com.noryar.security.framework.interceptor.CommonInterceptor"></bean>-->
+    <!--</mvc:interceptor>-->
+    <!--<mvc:interceptor>-->
+      <!--<mvc:mapping path="/**/license/**"/>-->
+      <!--<bean class="com.noryar.security.framework.interceptor.UserAuthInterceptor"></bean>-->
+    <!--</mvc:interceptor>-->
+  <!--</mvc:interceptors>-->
 	
   <!-- freemarker -->
   <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-    <property name="templateLoaderPath" value="/view/"/>
+    <property name="templateLoaderPath" value="/WEB-INF/system/"/>
     <property name="defaultEncoding" value="utf-8" />
     <property name="freemarkerSettings">
       <props>
@@ -55,7 +55,7 @@
   </bean>
 	
   <!-- 静态资源过滤 -->
-  <mvc:resources location="/view/" mapping="/view/**"/>
+  <!--<mvc:resources location="/view/" mapping="/view/**"/>-->
 	
   <!-- 文件上传 -->
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

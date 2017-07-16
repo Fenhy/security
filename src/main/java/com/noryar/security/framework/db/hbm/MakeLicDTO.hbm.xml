@@ -1,36 +1,36 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2017-3-8 17:55:05 by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
     <class name="com.noryar.security.framework.db.hbm.MakeLicDTO" table="MAKE_LIC">
-    	<id name="licid">
-    		<column name="LICID"></column>
-    		<generator class="uuid"></generator>
-    	</id>
-    	<property name="username" type="java.lang.String">
-            <column name="USERNAME" />
+        <id name="licid">
+            <column name="LICID"></column>
+            <generator class="uuid"></generator>
+        </id>
+        <property name="username" type="java.lang.String">
+            <column name="USERNAME"/>
         </property>
         <property name="start" type="java.util.Date">
-            <column name="START" />
+            <column name="START"/>
         </property>
         <property name="end" type="java.util.Date">
-            <column name="END" />
+            <column name="END"/>
         </property>
         <property name="createUser" type="java.lang.String">
-            <column name="CREATE_USER" />
+            <column name="CREATE_USER"/>
         </property>
         <property name="createDate" type="java.util.Date">
-            <column name="CREATE_DATE" />
+            <column name="CREATE_DATE"/>
         </property>
         <property name="updateUser" type="java.lang.String">
-            <column name="UPDATE_USER" />
+            <column name="UPDATE_USER"/>
         </property>
         <property name="updateDate" type="java.util.Date">
-            <column name="UPDATE_DATE" />
+            <column name="UPDATE_DATE"/>
         </property>
         <property name="url" type="java.lang.String">
-        	<column name="URL"/>
+            <column name="URL"/>
         </property>
     </class>
 </hibernate-mapping>

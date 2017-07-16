@@ -8,7 +8,7 @@ import java.util.List;
  * @author leon.
  *
  */
-public class PageInfoModel implements Serializable {
+public class PageInfoModel<T> implements Serializable {
 
 	/**
 	 * 序列化参数.
@@ -38,7 +38,7 @@ public class PageInfoModel implements Serializable {
 	/**
 	 * 结果集记录.
 	 */
-	private List<Object> dataList;
+	private List<T> dataList;
 
 	/**
 	 * 功能描述：当前页的获取.
@@ -108,7 +108,7 @@ public class PageInfoModel implements Serializable {
 	 * 功能描述：结果集记录的获取.
 	 * @return 结果集记录.
 	 */
-	public List<Object> getDataList() {
+	public List<T> getDataList() {
 		return dataList;
 	}
 
@@ -116,7 +116,7 @@ public class PageInfoModel implements Serializable {
 	 * 功能描述：结果集记录的设定.
 	 * @param dataList 结果集记录.
 	 */
-	public void setDataList(List<Object> dataList) {
+	public void setDataList(List<T> dataList) {
 		this.dataList = dataList;
 	}
 

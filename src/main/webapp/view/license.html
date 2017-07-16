@@ -100,6 +100,7 @@
 <script type="text/javascript" src="${request.contextPath}/view/framework/vue/js/vue.js"></script>
 <script type="text/javascript" src="${request.contextPath}/view/js/util.js"></script>
 <script src="${request.contextPath}/view/js/license.js"></script>
+<script src="${request.contextPath}/view/js/common.js"></script>
 <script type="text/javascript">
 	var ajaxHelper = new AjaxHelper();
 	var vueApp = new Vue({
@@ -123,13 +124,13 @@
 	    methods: {
 	    	getLicList: function() {
 	            // 定义vm变量，让它指向this,this是当前的Vue实例
-	            var vm = this,
-	                callback = function(data) {
-	                    // 由于函数的作用域，这里不能用this
-	                    var pageInfo = data['pageInfo'];
-	                    vm.dataList = pageInfo['dataList'];
-	                    vm.pageInfo = pageInfo;
-	                }
+	            var vm = this;
+                var callback = function(data) {
+                    // 由于函数的作用域，这里不能用this
+                    var pageInfo = data['pageInfo'];
+                    vm.dataList = pageInfo['dataList'];
+                    vm.pageInfo = pageInfo;
+                }
 	            var pageInfo = vm.pageInfo;
 	            // 过滤分页
 	            if (pageInfo.currentPage <= 0) {
